@@ -1,0 +1,54 @@
+# Create the data frame
+data <- data.frame(
+  Location = c("A", "B", "C", "D", "E"),
+  Temperature = c(15, 20, 18, 12, 17),
+  Humidity = c(65, 70, 68, 60, 72),
+  CO2 = c(400, 450, 420, 380, 430)
+)
+
+# 1. How do CO2 levels vary with both temperature and humidity across different locations?
+print("1. CO2 levels variation with temperature and humidity:")
+print(data)
+
+# 2. Create a 3D scatter plot to visualize the relationship between temperature, humidity, and CO2 levels.
+plot(data$Temperature, data$Humidity, type = "n",
+     main = "Temperature, Humidity, and CO2 Levels",
+     xlab = "Temperature (°C)", ylab = "Humidity (%)")
+text(data$Temperature, data$Humidity, labels = data$Location, pos = 3, offset = 0.5)
+symbols(data$Temperature, data$Humidity, 
+        circles = (data$CO2 - min(data$CO2)) / 30,
+        inches = 0.35, add = TRUE, bg = "lightblue")
+legend("topright", legend = paste(data$Location, ": ", data$CO2, " ppm", sep = ""),
+       title = "CO2 Levels", bty = "n")
+
+# 3. Is there a spatial pattern in the 3D plot of temperature, humidity, and CO2 levels among the locations?
+print("3. Spatial pattern analysis:")
+print("Visual inspection of the plot is required. No clear spatial pattern is evident from this limited data.")
+
+# 4. Generate a 3D surface plot to illustrate how CO2 levels change with variations in both temperature and humidity.
+# (Note: A true 3D surface plot requires more data points. We'll use a contour plot as an approximation)
+contour(x = seq(min(data$Temperature), max(data$Temperature), length.out = 50),
+        y = seq(min(data$Humidity), max(data$Humidity), length.out = 50),
+        z = outer(seq(min(data$Temperature), max(data$Temperature), length.out = 50),
+                  seq(min(data$Humidity), max(data$Humidity), length.out = 50),
+                  function(x,y) approx(data$Temperature, data$CO2, x)$y + 
+                    approx(data$Humidity, data$CO2, y)$y - mean(data$CO2)),
+        main = "Approximated CO2 Levels Based on Temperature and Humidity",
+        xlab = "Temperature (°C)", ylab = "Humidity (%)")
+points(data$Temperature, data$Humidity, pch = 19, col = "red")
+text(data$Temperature, data$Humidity, labels = data$Location, pos = 3, offset = 0.5)
+
+# 5. Compare the 3D plots of CO2 levels against both temperature and humidity separately. Are there any noticeable trends?
+par(mfrow = c(1, 2))
+plot(data$Temperature, data$CO2, 
+     main = "CO2 vs Temperature", xlab = "Temperature (°C)", ylab = "CO2 (ppm)")
+abline(lm(CO2 ~ Temperature, data = data), col = "red")
+
+plot(data$Humidity, data$CO2, 
+     main = "CO2 vs Humidity", xlab = "Humidity (%)", ylab = "CO2 (ppm)")
+abline(lm(CO2 ~ Humidity, data = data), col = "blue")
+
+# Print trend analysis
+print("5. Trend analysis:")
+print(summary(lm(CO2 ~ Temperature, data = data)))
+print(summary(lm(CO2 ~ Humidity, data = data)))
