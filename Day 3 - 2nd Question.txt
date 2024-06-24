@@ -1,0 +1,71 @@
+# Load necessary libraries
+library(ggplot2)
+library(plotly)
+
+# Create the data frame
+data <- data.frame(
+  Date = as.Date(c("2023-01-01", "2023-01-02", "2023-01-03", "2023-01-04", "2023-01-05")),
+  StockPrice = c(100, 102, 98, 105, 108),
+  VolumeTraded = c(2.5, 3.0, 2.2, 2.8, 3.5),
+  MarketCap = c(500, 510, 490, 525, 540)
+)
+
+# 1. How does stock price relate to both volume traded and market capitalization?
+cor_stock_volume <- cor(data$StockPrice, data$VolumeTraded)
+cor_stock_marketcap <- cor(data$StockPrice, data$MarketCap)
+cor_volume_marketcap <- cor(data$VolumeTraded, data$MarketCap)
+
+cat("Correlation between Stock Price and Volume Traded:", cor_stock_volume, "\n")
+cat("Correlation between Stock Price and Market Cap:", cor_stock_marketcap, "\n")
+cat("Correlation between Volume Traded and Market Cap:", cor_volume_marketcap, "\n")
+
+# 2. Create a 3D scatter plot to visualize the relationship
+scatter_plot <- plot_ly(data, x = ~VolumeTraded, y = ~MarketCap, z = ~StockPrice, 
+                        type = 'scatter3d', mode = 'markers', 
+                        marker = list(size = 5)) %>%
+  layout(title = "3D Scatter Plot: Volume Traded, Market Cap, and Stock Price",
+         scene = list(xaxis = list(title = 'Volume Traded (millions)'),
+                      yaxis = list(title = 'Market Cap ($)'),
+                      zaxis = list(title = 'Stock Price ($)')))
+
+# Print the scatter plot
+print(scatter_plot)
+
+# 3. Identifying clusters or outliers in the 3D plot
+# (Clusters or outliers would be visually identified in the above 3D scatter plot)
+
+# 4. Generate a 3D surface plot for market capitalization with stock price and volume traded
+surface_plot <- plot_ly(data, x = ~VolumeTraded, y = ~StockPrice, z = ~MarketCap, 
+                        type = 'mesh3d') %>%
+  layout(title = "3D Surface Plot: Market Cap with Stock Price and Volume Traded",
+         scene = list(xaxis = list(title = 'Volume Traded (millions)'),
+                      yaxis = list(title = 'Stock Price ($)'),
+                      zaxis = list(title = 'Market Cap ($)')))
+
+# Print the surface plot
+print(surface_plot)
+
+# 5. Compare 3D plots of stock price against both volume traded and market cap separately
+# 3D plot: Stock Price vs Volume Traded
+scatter_plot_volume <- plot_ly(data, x = ~VolumeTraded, y = ~StockPrice, z = ~MarketCap, 
+                               type = 'scatter3d', mode = 'markers', 
+                               marker = list(size = 5)) %>%
+  layout(title = "3D Scatter Plot: Stock Price vs Volume Traded and Market Cap",
+         scene = list(xaxis = list(title = 'Volume Traded (millions)'),
+                      yaxis = list(title = 'Stock Price ($)'),
+                      zaxis = list(title = 'Market Cap ($)')))
+
+# Print the scatter plot for Stock Price vs Volume Traded
+print(scatter_plot_volume)
+
+# 3D plot: Stock Price vs Market Cap
+scatter_plot_marketcap <- plot_ly(data, x = ~MarketCap, y = ~StockPrice, z = ~VolumeTraded, 
+                                  type = 'scatter3d', mode = 'markers', 
+                                  marker = list(size = 5)) %>%
+  layout(title = "3D Scatter Plot: Stock Price vs Market Cap and Volume Traded",
+         scene = list(xaxis = list(title = 'Market Cap ($)'),
+                      yaxis = list(title = 'Stock Price ($)'),
+                      zaxis = list(title = 'Volume Traded (millions)')))
+
+# Print the scatter plot for Stock Price vs Market Cap
+print(scatter_plot_marketcap)
