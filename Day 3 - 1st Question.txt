@@ -1,0 +1,32 @@
+# Load necessary libraries
+library(ggplot2)
+library(plotly)
+
+# Create the data frame
+data <- data.frame(
+  Date = as.Date(c("2023-01-01", "2023-01-02", "2023-01-03", "2023-01-04", "2023-01-05")),
+  StockPrice = c(100, 102, 98, 105, 108),
+  VolumeTraded = c(2.5, 3.0, 2.2, 2.8, 3.5),
+  MarketCap = c(500, 510, 490, 525, 540)
+)
+
+# 1. Relationship between stock price, volume traded, and market capitalization
+cor(data$StockPrice, data$VolumeTraded)
+cor(data$StockPrice, data$MarketCap)
+cor(data$VolumeTraded, data$MarketCap)
+
+# 2. 3D scatter plot visualization
+plot_ly(data, x = ~VolumeTraded, y = ~MarketCap, z = ~StockPrice, type = 'scatter3d', mode = 'markers')
+
+# 3. Identifying clusters or outliers
+# (Clusters or outliers would be visually identified in the above 3D scatter plot)
+
+# 4. 3D surface plot for market capitalization
+plot_ly(data, x = ~VolumeTraded, y = ~StockPrice, z = ~MarketCap, type = 'surface')
+
+# 5. Comparison of 3D plots of stock price against volume traded and market cap separately
+# 3D plot: Stock Price vs Volume Traded
+plot_ly(data, x = ~VolumeTraded, y = ~StockPrice, z = ~MarketCap, type = 'scatter3d', mode = 'markers')
+
+# 3D plot: Stock Price vs Market Cap
+plot_ly(data, x = ~MarketCap, y = ~StockPrice, z = ~VolumeTraded, type = 'scatter3d', mode = 'markers')
